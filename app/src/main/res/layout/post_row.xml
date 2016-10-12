@@ -9,18 +9,17 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/previewIV" />
-
+        android:id="@+id/asyncPreviewIV" />
     // TITLE
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_toRightOf="@+id/previewIV"
+        android:layout_toRightOf="@+id/asyncPreviewIV"
         android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
         android:layout_toLeftOf="@+id/ic_arrow"
-        android:layout_toEndOf="@+id/previewIV"
+        android:layout_toEndOf="@+id/asyncPreviewIV"
         android:id="@+id/titleTV" />
     // AUTHOR
     <TextView
@@ -30,8 +29,8 @@
         android:text=""
         android:id="@+id/authorTV"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/previewIV"
-        android:layout_toEndOf="@+id/previewIV" />
+        android:layout_toRightOf="@+id/asyncPreviewIV"
+        android:layout_toEndOf="@+id/asyncPreviewIV" />
     // DATE
     <TextView
         android:layout_width="wrap_content"
@@ -71,8 +70,8 @@
         android:src="@drawable/ic_comment"
         android:id="@+id/commentIcon"
         android:layout_below="@+id/titleTV"
-        android:layout_toRightOf="@+id/previewIV"
-        android:layout_toEndOf="@+id/previewIV" />
+        android:layout_toRightOf="@+id/asyncPreviewIV"
+        android:layout_toEndOf="@+id/asyncPreviewIV" />
     // ARROW
     <ImageView
         android:layout_width="20dp"

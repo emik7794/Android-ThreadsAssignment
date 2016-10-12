@@ -1,6 +1,9 @@
 package ar.edu.unc.famaf.redditreader.ui;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +11,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 import ar.edu.unc.famaf.redditreader.R;
@@ -23,6 +30,32 @@ public class PostAdapter extends ArrayAdapter<PostModel> {
         this.postList = postList;
     }
 
+    protected class DownloadPreviewImageAsyncTask extends AsyncTask<URL, Integer, Bitmap> {
+
+        @Override
+        protected Bitmap doInBackground(URL... urls){
+            URL url = urls[0];
+            Bitmap bitmap = null;
+            HttpURLConnection connection = null;
+
+            try {
+                connection = (HttpURLConnection) url.openConnection();
+                InputStream is = connection.getInputStream();
+                bitmap = BitmapFactory.decodeStream(is,null,null);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return bitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result){
+            System.out.println("onPostExecute");
+            ImageView iv = (ImageView) findViewById(R.id.asyncPreviewIV);
+            iv.setImageBitmap(result);
+        }
+    }
 
     @Override
     public int getCount() {
@@ -54,8 +87,8 @@ public class PostAdapter extends ArrayAdapter<PostModel> {
             TextView authorTV = (TextView) convertView.findViewById(R.id.authorTV);
             TextView commentsTV = (TextView) convertView.findViewById(R.id.commentsTV);
             TextView dateTV = (TextView) convertView.findViewById(R.id.dateTV);
-            ImageView previewIV = (ImageView) convertView.findViewById(R.id.previewIV);
-            viewHolder = new ViewHolder(titleTV, authorTV, commentsTV, dateTV, previewIV);
+            ImageView asyncPreviewIV = (ImageView) convertView.findViewById(R.id.asyncPreviewIV);
+            viewHolder = new ViewHolder(titleTV, authorTV, commentsTV, dateTV, asyncPreviewIV);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -67,7 +100,14 @@ public class PostAdapter extends ArrayAdapter<PostModel> {
         viewHolder.authorTV.setText(pm.getAuthor());
         viewHolder.commentsTV.setText(String.valueOf(pm.getComments()));
         viewHolder.dateTV.setText(pm.getDate());
-        viewHolder.previewIV.setImageResource(pm.getPreviewId());
+
+        URL[] urlArray = new URL[1];
+        urlArray[0] = pm.getUrlPreviewImage();
+        DownloadPreviewImageAsyncTask dwnAsyncTask;
+        dwnAsyncTask = new DownloadPreviewImageAsyncTask();
+        dwnAsyncTask.execute(urlArray);
+
+        //viewHolder.asyncPreviewIV.setImageResource();
 
         return convertView;
     }
@@ -77,19 +117,18 @@ public class PostAdapter extends ArrayAdapter<PostModel> {
         public final TextView authorTV;
         public final TextView commentsTV;
         public final TextView dateTV;
-        public final ImageView previewIV;
+        public final ImageView asyncPreviewIV;
 
         public ViewHolder(TextView titleTV, TextView authorTV, TextView commentsTV,
-                          TextView dateTV, ImageView previewIV) {
+                          TextView dateTV, ImageView asyncPreviewIV) {
 
             this.titleTV = titleTV;
             this.authorTV = authorTV;
             this.commentsTV = commentsTV;
             this.dateTV = dateTV;
-            this.previewIV = previewIV;
+            this.asyncPreviewIV = asyncPreviewIV;
         }
 
     }
-
 
 }
