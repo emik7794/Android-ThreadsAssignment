@@ -10,8 +10,7 @@ public class PostModel {
     private String author;
     private String date;
     private int comments;
-    //private int previewImageId;
-    private URL urlPreviewImage;
+    private String urlString;
 
     public String getTitle() {
         return title;
@@ -45,24 +44,11 @@ public class PostModel {
         this.comments = comments;
     }
 
-    /*public int getPreviewId() {
-        return previewImageId;
+    public String getUrlString() {
+        return urlString;
     }
 
-    public void setPreviewId(int previewId) {
-        this.previewImageId = previewId;
-    }
-    */
-    public URL getUrlPreviewImage() {
-        return urlPreviewImage;
-    }
-
-    public void setUrlPreviewImage(String urlString) {
-
-        try {
-            this.urlPreviewImage = new URL(urlString);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+    public void setUrlString(String urlString) {
+        this.urlString = urlString;
     }
 }
